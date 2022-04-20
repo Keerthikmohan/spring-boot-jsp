@@ -29,7 +29,7 @@ pipeline {
             steps {
                 sh '''
                     version=$(perl -nle 'print "$1" if /<version>(v\\d+\\.\\d+\\.\\d+)<\\/version>/' pom.xml)
-                    rsync -avzP target/news-${version}.jar root@54.210.74.72:/opt/
+                    rsync -avzP 'ssh -o StrictHostKeyChecking=no' target/news-${version}.jar root@54.210.74.72:/opt/
                 '''
             }
         }
