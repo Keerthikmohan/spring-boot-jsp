@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Source') {
             steps {
-               git branch: 'main', changelog: false, credentialsId: 'github', poll: false, url: 'https://github.com/ajilraju/spring-boot-jsp.git'
+             git branch: 'main', changelog: false, credentialsId: '000fae15-28b7-4612-bfe3-8266f1af1afa', poll: false, url: 'https://github.com/Keerthikmohan/spring-boot-jsp.git'
             }
         }
         stage('Test') {
@@ -29,7 +29,7 @@ pipeline {
             steps {
                 sh '''
                     version=$(perl -nle 'print "$1" if /<version>(v\\d+\\.\\d+\\.\\d+)<\\/version>/' pom.xml)
-                    rsync -avzP target/news-${version}.jar root@${SERVER_IP}:/opt/
+                    rsync -avzP -e "ssh -o StrictHostKeyChecking=no" target/news-${version}.jar root@54.210.74.72:/opt/
                 '''
             }
         }
