@@ -1,4 +1,4 @@
-pipeline {
+ipipeline {
     agent any
 
     tools {
@@ -30,7 +30,7 @@ pipeline {
                 sh '''
                     version=$(perl -nle 'print "$1" if /<version>(v\\d+\\.\\d+\\.\\d+)<\\/version>/' pom.xml)
                    rsync -avzP -e "ssh -o StrictHostKeyChecking=no" target/news-${version}.jar root@${SERVER_IP}:/var/www/html
-                   java -jar -Dserver.port=8085 /var/www/html/target/news-${version}.jar
+                   java -jar -Dserver.port=8085 /var/www/html/news-${version}.jar
 
                 '''
             }
