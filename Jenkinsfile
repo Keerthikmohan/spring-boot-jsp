@@ -32,9 +32,9 @@ pipeline {
         }
         stage('Publishing Artifcats') {
             steps {
-                withAWS(profile:'default') {
+                withAWS(profile:'keerthi') {
     
-                    s3Upload(file:"target/news-${APP_VERSION.trim()}.jar", bucket:'keyshell-artifactory', path:'spring-news-app/')
+                    s3Upload(file:"target/news-${APP_VERSION.trim()}.jar", bucket:'keerthinibin', path:'keerthinibin/spring_boot/')
                 }
             }
         }
