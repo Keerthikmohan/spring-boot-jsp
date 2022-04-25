@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Publishing Artifcats') {
             steps {
-                withAWS(profile:'keerthi') {
+                withAWS(credentials: 'buckets3', region: 'us-east-1') {
     
                     s3Upload(file:"target/news-${APP_VERSION.trim()}.jar", bucket:'keerthinibin', path:'keerthinibin/spring_boot/')
                 }
@@ -41,7 +41,7 @@ pipeline {
         stage('Deploying Artifcats') {
             steps {
                 sh '''
-                    ssh -o StrictHostKeyChecking=no deployer@3.142.145.171 "sudo ~/deploy.sh ${APP_VERSION}"
+                    ssh -o StrictHostKeyChecking=no ubuntu@54.210.74.72 "sudo ~/deploy.sh ${APP_VERSION}"
                 '''
             }
         }
