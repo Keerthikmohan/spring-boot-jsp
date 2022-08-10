@@ -1,0 +1,52 @@
+pipeline {
+    agent any 
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "maven 3.8.5"
+    }
+    
+    parameters {
+  string defaultValue: '127.0.0.1', description: 'Production server IP', name: 'SERVER_IP'
+}
+
+    stages {
+        stage('Source') { 
+            steps {
+                git branch: 'develop', changelog: false, credentialsId: 'angular', poll: false, url: 'https://github.com/Keerthikmohan/spring-boot-jsp.git'
+            }
+        }
+    
+            stage('Test') { 
+            steps {
+
+                sh '''
+                mvn -Dmaven.test.failure.ignore=true clean package
+                
+                mvn test'''
+            }
+        }
+    
+        stage('Build') { 
+            steps {
+                sh 'mvn package '
+            }
+        }
+        stage('Deploy') { 
+            steps {
+              
+              sh '''
+              
+             echo "${SERVER_IP}"
+             
+             ssh -o StrictHostKeyChecking=no root@${SERVER_IP} -p 22 rm -rf /var/www/html/*
+              
+            rsync -avzP -e "ssh -o StrictHostKeyChecking=no" target/*.jar root@${SERVER_IP}:/var/www/html/
+              
+           java -jar -Dserver.port=8085 /var/www/html/*.jar
+'''
+                // 
+            }
+        }
+    }
+}
